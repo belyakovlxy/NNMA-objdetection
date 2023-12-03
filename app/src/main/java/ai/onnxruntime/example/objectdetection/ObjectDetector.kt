@@ -13,7 +13,8 @@ import java.nio.FloatBuffer
 import java.util.Collections
 
 internal data class Result(
-    var outputBitmap: Bitmap
+    var outputBitmap: Bitmap,
+    var outputBox: Array<FloatArray>
 ) {}
 
 internal class ObjectDetector(
@@ -35,19 +36,18 @@ internal class ObjectDetector(
         inputTensor.use {
             // Step 3: call ort inferenceSession run
             val output = ortSession.run(Collections.singletonMap("image", inputTensor),
-//                setOf("image_out","scaled_box_out_next")
-                setOf("image_out")
+//              setOf("image_out","scaled_box_out_next")
+                setOf("image_out", "scaled_box_out")
 
             )
-
-
             // Step 4: output analysis
             output.use {
                 val rawOutput = (output?.get(0)?.value) as ByteArray
+                val boxOutput = (output?.get(1)?.value) as Array<FloatArray>
                 val outputImageBitmap = byteArrayToBitmap(rawOutput)
 
                 // Step 5: set output result
-                var result = Result(outputImageBitmap)
+                var result = Result(outputImageBitmap,boxOutput)
                 return result
             }
         }

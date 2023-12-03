@@ -83,25 +83,20 @@ class MainActivity : AppCompatActivity() {
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER) // Text Overlapping Pattern
 
         canvas.drawBitmap(mutableBitmap, 0.0f, 0.0f, paint)
-//        var boxit = result.outputBox.iterator()
-//
-//        while(boxit.hasNext()) {
-//            var box_info = boxit.next()
-//            Log.d("DETECTED CLASSES", box_info[5].toString())
-//        }
-//
-//        while(boxit.hasNext()) {
-//            var box_info = boxit.next()
-//            canvas.drawText("%s:%.2f".format(classes[box_info[5].toInt()],box_info[4]),
-//                box_info[0]-box_info[2]/2, box_info[1]-box_info[3]/2, paint)
-//        }
+        var boxit = result.outputBox.iterator()
+
+        while(boxit.hasNext()) {
+            var box_info = boxit.next()
+            canvas.drawText("%s:%.2f".format(classes[box_info[5].toInt()],box_info[4]),
+                box_info[0]-box_info[2]/2, box_info[1]-box_info[3]/2, paint)
+        }
 
         outputImage.setImageBitmap(mutableBitmap)
     }
 
     private fun readModel(): ByteArray {
         //val modelID = R.raw.yolov8n_with_pre_post_processing
-        val modelID = R.raw.best_preproc
+        val modelID = R.raw.best_preproc_v5
         //val modelID = R.raw.yolov8n
         return resources.openRawResource(modelID).readBytes()
     }
